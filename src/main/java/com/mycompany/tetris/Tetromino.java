@@ -51,11 +51,58 @@ public class Tetromino {
         for (Block b : blocks) b.mover();
     }
 
-    public void mover(int dx) {
+    public void mover(int dx, Color[][] red) {
+        for (Block b : blocks) {
+            int nuevaCol = b.getColumna() + dx;
+            int fila = b.getFila();
+
+            if (nuevaCol < 0 || nuevaCol >= red[0].length || red[fila][nuevaCol] != null) {
+                return;
+            }
+        }
         for (Block b : blocks) b.setColumna(b.getColumna() + dx);
     }
 
     public Color getColor() {
         return color;
     }
+
+    public void rotar(Color[][] red) {
+        Block pivote = blocks.get(0);
+        int pivotRow = pivote.getFila();
+        int pivotCol = pivote.getColumna();
+
+        List<Block> nuevaPosicion = new ArrayList<>();
+
+        for (Block b : blocks) {
+            int fila = b.getFila();
+            int col = b.getColumna();
+
+            int nuevaFila = pivotRow - (col - pivotCol);
+            int nuevaCol = pivotCol + (fila - pivotRow);
+
+            if (nuevaFila < 0 || nuevaFila >= red.length || nuevaCol < 0 || nuevaCol >= red[0].length)
+                return;
+
+            if (red[nuevaFila][nuevaCol] != null)
+                return;
+
+            nuevaPosicion.add(b.cloneConPosicion(nuevaFila, nuevaCol));
+        }
+
+        blocks = nuevaPosicion;
+    }
+
+
+    public void draw(Graphics g, int tamaño) {
+        for (Block b : blocks) {
+            g.setColor(color);
+            g.fillRect(b.getColumna() * tamaño, b.getFila() * tamaño, tamaño, tamaño);
+            g.setColor(Color.BLACK);
+            g.drawRect(b.getColumna() * tamaño, b.getFila() * tamaño, tamaño, tamaño);
+        }
+    }
+
+
+
 }

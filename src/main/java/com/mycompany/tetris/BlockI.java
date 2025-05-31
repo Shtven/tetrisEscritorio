@@ -62,5 +62,9 @@ public class BlockI implements Block{
     public void setColumna(int columna) {
         this.columna = columna;
     }
-    
+
+    @Override
+    public Block cloneConPosicion(int fila, int columna) {
+        return new BlockI(fila, columna, this.color);
+    }
 }

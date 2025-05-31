@@ -15,13 +15,26 @@ public class GameThread extends Thread {
         this.panel = panel;
     }
 
+    @Override
     public void run() {
         while (true) {
             try {
                 Thread.sleep(1000);
+
+                if (panel.puedeBajarActual()) {
+                    panel.bajarTetromino();
+                } else {
+                    panel.fijarTetromino();
+                    panel.eliminarLineasCompletas();
+                    panel.generarNuevoBlock();
+                }
+
+                panel.repaint();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
 }

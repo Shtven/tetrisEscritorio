@@ -12,22 +12,22 @@ import java.awt.*;
 
 public class Red {
     private Color[][] matrix;
-    private int rows, cols;
+    private int filas, columnas;
 
-    public Red(int rows, int cols) {
-        this.rows = rows;
-        this.cols = cols;
-        matrix = new Color[rows][cols];
+    public Red(int filas, int columnas) {
+        this.filas = filas;
+        this.columnas = columnas;
+        matrix = new Color[filas][columnas];
     }
 
-    public void setColor(int row, int col, Color color) {
-        if (row >= 0 && row < rows && col >= 0 && col < cols)
-            matrix[row][col] = color;
+    public void setColor(int filas, int columnas, Color color) {
+        if (filas >= 0 && filas < this.filas && columnas >= 0 && columnas < this.columnas)
+        matrix[filas][columnas] = color;
     }
 
-    public Color getColor(int row, int col) {
-        if (row >= 0 && row < rows && col >= 0 && col < cols)
-            return matrix[row][col];
+    public Color getColor(int filas, int columnas) {
+        if (filas >= 0 && filas < this.filas && columnas >= 0 && columnas < this.columnas)
+            return matrix[filas][columnas];
         return null;
     }
 }

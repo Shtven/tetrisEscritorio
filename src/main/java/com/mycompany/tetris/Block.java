@@ -25,5 +25,7 @@ public interface Block {
     void setColumna(int columna);
     
     Color getColor();
-    
+
+    Block cloneConPosicion(int fila, int columna);
+
 }
