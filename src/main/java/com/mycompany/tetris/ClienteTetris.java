@@ -22,7 +22,7 @@ public class ClienteTetris {
 
             soket = new Socket(direccion, 1234);
             entradaDatos = new BufferedReader(new InputStreamReader(soket.getInputStream()));
-            salidaDatos = new PrintWriter(soket.getOutputStream());
+            salidaDatos = new PrintWriter(soket.getOutputStream(), true);
 
             salidaDatos.println("Se unió:" + usuario);
 
@@ -43,8 +43,10 @@ public class ClienteTetris {
     }
 
     private void procesarMensaje(String mensaje) {
-        if (scoreText != null) {
-            SwingUtilities.invokeLater(() -> scoreText.append(mensaje + "\n"));
+        if (mensaje.startsWith("RANKING")) {
+            SwingUtilities.invokeLater(() -> {
+                scoreText.setText(mensaje.replaceFirst("RANKING\\n", ""));
+            });
         }
     }
 

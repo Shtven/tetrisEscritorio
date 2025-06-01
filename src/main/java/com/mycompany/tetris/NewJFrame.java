@@ -22,7 +22,7 @@ public class NewJFrame extends javax.swing.JFrame {
         if(file.getUser() == null){
             file.setUser(JOptionPane.showInputDialog(null, "Ingresa tu nombre de usuario:"));
         }
-        ClienteTetris cliente = new ClienteTetris("192.168.100.38", ScoreArea, file.getUser());
+        ClienteTetris cliente = new ClienteTetris("localhost", ScoreArea, file.getUser());
         GamePanel panel = new GamePanel(cliente, file, ScoreArea);
         mostrarPanel(panel);
         panel.iniciar();
