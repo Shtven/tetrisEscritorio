@@ -68,6 +68,7 @@ public class GamePanel extends JPanel {
     public void iniciar() {
         gameThread = new GameThread(this);
         gameThread.start();
+        scoreFile.setScore(0);
     }
 
     public void generarNuevoBlock() {
@@ -86,9 +87,20 @@ public class GamePanel extends JPanel {
 
                 try { Thread.sleep(1000); } catch (InterruptedException ex) {}
 
+// Obtener la primera línea del ranking (nombre del ganador)
+                String[] lineas = textScore.getText().split("\n");
+                String ganador = "Desconocido";
+
+                for (String linea : lineas) {
+                    if (linea.startsWith("usuario:")) {
+                        ganador = linea.trim();
+                        break;
+                    }
+                }
+
                 int opcion = JOptionPane.showOptionDialog(
                         this,
-                        "Fin del juego\n\n" + "\n¿Quieres jugar otra vez?",
+                        "Fin del juego\n\n" + ganador + "\n¿Quieres jugar otra vez?",
                         "Game Over",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.INFORMATION_MESSAGE,
@@ -115,9 +127,7 @@ public class GamePanel extends JPanel {
     public void reiniciarJuego() {
         red = new Color[Filas][Columnas];
         scoreFile.setScore(0);
-        if (textScore != null) {
-            textScore.setText("usuario: " + scoreFile.getUser() + "                 Score: " + String.valueOf(scoreFile.getScore()));
-        }
+        cliente.enviarPuntaje(0);
         generarNuevoBlock();
     }
 
