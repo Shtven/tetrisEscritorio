@@ -14,6 +14,9 @@ public class ClienteTetris {
     private JTextArea scoreText;
     private String usuario;
 
+    private boolean recibiendoRanking = false;
+    private StringBuilder rankingBuilder = new StringBuilder();
+
     public ClienteTetris(String direccion, JTextArea scoreText, String usuario) {
         this.scoreText = scoreText;
         this.usuario = usuario;
@@ -44,12 +47,17 @@ public class ClienteTetris {
 
     private void procesarMensaje(String mensaje) {
         if (mensaje.startsWith("RANKING")) {
-            SwingUtilities.invokeLater(() -> {
-                scoreText.setText(mensaje.replaceFirst("RANKING\\n", ""));
-            });
+            recibiendoRanking = true;
+            rankingBuilder.setLength(0); // limpiar buffer
+        } else if (recibiendoRanking) {
+            if (mensaje.trim().isEmpty()) {
+                recibiendoRanking = false;
+                SwingUtilities.invokeLater(() -> scoreText.setText(rankingBuilder.toString()));
+            } else {
+                rankingBuilder.append(mensaje).append("\n");
+            }
         }
     }
-
     private void mostrarMensaje(String mensaje) {
         if (scoreText != null) {
             SwingUtilities.invokeLater(() -> scoreText.append(mensaje + "\n"));
