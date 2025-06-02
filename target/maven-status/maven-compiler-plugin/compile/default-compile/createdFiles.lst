@@ -2,10 +2,12 @@ com/mycompany/tetris/NewJFrame$1.class
 com/mycompany/tetris/BlockI.class
 com/mycompany/tetris/Block.class
 com/mycompany/tetris/Tetromino.class
+com/mycompany/tetris/NewJFrame$2.class
 com/mycompany/tetris/GamePanel.class
 com/mycompany/tetris/Red.class
 com/mycompany/tetris/NewJFrame.class
 com/mycompany/tetris/BlockT.class
+com/mycompany/tetris/NewJFrame$3.class
 com/mycompany/tetris/Tetris.class
 com/mycompany/tetris/BlockL.class
 com/mycompany/tetris/BlockBasico.class

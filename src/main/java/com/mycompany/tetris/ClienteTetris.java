@@ -16,15 +16,20 @@ public class ClienteTetris {
     private PrintWriter salidaDatos;
     private JTable scoreTable;
     private String usuario;
+    private JTextArea chat;
 
     private List<String[]> puntajes = new ArrayList<>();
     private boolean recibiendoPuntajes = false;
     private StringBuilder puntajesBuilder = new StringBuilder();
 
-    public ClienteTetris(String direccion, JTable scoreTable, String usuario) {
+    public ClienteTetris(String direccion, JTable scoreTable, String usuario, JTextArea chat) {
         this.scoreTable = scoreTable;
         this.usuario = usuario;
+        this.chat = chat;
 
+        if (chat != null){
+            chat.setText("");
+        }
         try{
 
             soket = new Socket(direccion, 1234);
@@ -71,6 +76,10 @@ public class ClienteTetris {
                     System.out.println("Error al procesar mensaje: " + mensaje);
                 }
             }
+        }else if (mensaje.startsWith("Chat:")) {
+            if (chat != null) {
+                SwingUtilities.invokeLater(() -> chat.append(mensaje.substring(5) + "\n"));
+            }
         }
     }
 
@@ -83,7 +92,7 @@ public class ClienteTetris {
     }
 
     public void enviarMensajeChat(String texto) {
-        salidaDatos.println("CHAT:" + usuario + ":" + texto);
+        salidaDatos.println("Chat:" + usuario + ":" + texto);
     }
 
     private void actualizarTabla() {

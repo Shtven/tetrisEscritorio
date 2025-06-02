@@ -13,10 +13,13 @@ import javax.swing.table.DefaultTableModel;
  * @author shtven
  */
 public class NewJFrame extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form NewJFrame
      */
+    
+    private ClienteTetris cliente;
+    
     public NewJFrame() {
 
         ScoreFile file = new ScoreFile();
@@ -24,7 +27,7 @@ public class NewJFrame extends javax.swing.JFrame {
         if(file.getUser() == null){
             file.setUser(JOptionPane.showInputDialog(null, "Ingresa tu nombre de usuario:"));
         }
-        ClienteTetris cliente = new ClienteTetris("localhost", scoreTable, file.getUser());
+        cliente = new ClienteTetris("localhost", scoreTable, file.getUser(), chat);
         GamePanel panel = new GamePanel(cliente, file, scoreTable);
         mostrarPanel(panel);
         panel.iniciar();
@@ -43,6 +46,10 @@ public class NewJFrame extends javax.swing.JFrame {
         PanelTetris = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         scoreTable = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        chat = new javax.swing.JTextArea();
+        mensajeAlChat = new javax.swing.JTextField();
+        EnviarAlChat = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -62,11 +69,34 @@ public class NewJFrame extends javax.swing.JFrame {
 
         scoreTable.setFont(new java.awt.Font("Nimbus Mono PS", 1, 12)); // NOI18N
         scoreTable.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {},
-                new String[] { "Usuario", "Puntaje" }
-        ));
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
 
+            }
+        ));
         jScrollPane2.setViewportView(scoreTable);
+
+        chat.setColumns(20);
+        chat.setRows(5);
+        jScrollPane1.setViewportView(chat);
+
+        mensajeAlChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mensajeAlChatActionPerformed(evt);
+            }
+        });
+
+        EnviarAlChat.setText("Enviar");
+        EnviarAlChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EnviarAlChatActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -76,7 +106,14 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGap(117, 117, 117)
                 .addComponent(PanelTetris, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(mensajeAlChat, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(EnviarAlChat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(105, 105, 105))
         );
         jPanel1Layout.setVerticalGroup(
@@ -88,7 +125,13 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addComponent(PanelTetris, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(64, 64, 64)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(83, 83, 83)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(mensajeAlChat, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                            .addComponent(EnviarAlChat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
@@ -105,6 +148,21 @@ public class NewJFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void mensajeAlChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mensajeAlChatActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mensajeAlChatActionPerformed
+
+    private void EnviarAlChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarAlChatActionPerformed
+        // TODO add your handling code here:
+        String texto = mensajeAlChat.getText().trim();
+        if(!texto.isEmpty()){
+           cliente.enviarMensajeChat(mensajeAlChat.getText());
+           mensajeAlChat.setText("");
+        }else{
+            JOptionPane.showMessageDialog(null, "Debes ingresar un mensaje\n Ejemplo: 'Hola a todos'");
+        }
+    }//GEN-LAST:event_EnviarAlChatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -155,9 +213,13 @@ public class NewJFrame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton EnviarAlChat;
     private javax.swing.JPanel PanelTetris;
+    private javax.swing.JTextArea chat;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField mensajeAlChat;
     private javax.swing.JTable scoreTable;
     // End of variables declaration//GEN-END:variables
 }
