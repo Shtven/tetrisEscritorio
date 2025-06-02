@@ -19,7 +19,7 @@ public class GameThread extends Thread {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(800);
 
                 if (panel.puedeBajarActual()) {
                     panel.bajarTetromino();

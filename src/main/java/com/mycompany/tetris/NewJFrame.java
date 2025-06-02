@@ -6,6 +6,7 @@ package com.mycompany.tetris;
 
 import java.awt.BorderLayout;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,16 +18,16 @@ public class NewJFrame extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     public NewJFrame() {
+
         ScoreFile file = new ScoreFile();
         initComponents();
         if(file.getUser() == null){
             file.setUser(JOptionPane.showInputDialog(null, "Ingresa tu nombre de usuario:"));
         }
-        ClienteTetris cliente = new ClienteTetris("localhost", ScoreArea, file.getUser());
-        GamePanel panel = new GamePanel(cliente, file, ScoreArea);
+        ClienteTetris cliente = new ClienteTetris("localhost", scoreTable, file.getUser());
+        GamePanel panel = new GamePanel(cliente, file, scoreTable);
         mostrarPanel(panel);
         panel.iniciar();
-        ScoreArea.setText("usuario: " + file.getUser() + "                 Score: " + String.valueOf(file.getScore()));
     }
 
     /**
@@ -40,8 +41,8 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         PanelTetris = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        ScoreArea = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        scoreTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -59,9 +60,13 @@ public class NewJFrame extends javax.swing.JFrame {
             .addGap(0, 695, Short.MAX_VALUE)
         );
 
-        ScoreArea.setColumns(20);
-        ScoreArea.setRows(5);
-        jScrollPane1.setViewportView(ScoreArea);
+        scoreTable.setFont(new java.awt.Font("Nimbus Mono PS", 1, 12)); // NOI18N
+        scoreTable.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][] {},
+                new String[] { "Usuario", "Puntaje" }
+        ));
+
+        jScrollPane2.setViewportView(scoreTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -70,9 +75,9 @@ public class NewJFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addComponent(PanelTetris, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 195, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(128, 128, 128))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(105, 105, 105))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -82,8 +87,8 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGap(37, 37, 37)
                         .addComponent(PanelTetris, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(64, 64, 64)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
@@ -146,10 +151,13 @@ public class NewJFrame extends javax.swing.JFrame {
     
     }
 
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelTetris;
-    private javax.swing.JTextArea ScoreArea;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable scoreTable;
     // End of variables declaration//GEN-END:variables
 }

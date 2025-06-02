@@ -2,23 +2,27 @@ package com.mycompany.tetris;
 
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClienteTetris {
     private Socket soket;
     private BufferedReader entradaDatos;
     private PrintWriter salidaDatos;
-    private JTextArea scoreText;
+    private JTable scoreTable;
     private String usuario;
 
-    private boolean recibiendoRanking = false;
-    private StringBuilder rankingBuilder = new StringBuilder();
+    private List<String[]> puntajes = new ArrayList<>();
+    private boolean recibiendoPuntajes = false;
+    private StringBuilder puntajesBuilder = new StringBuilder();
 
-    public ClienteTetris(String direccion, JTextArea scoreText, String usuario) {
-        this.scoreText = scoreText;
+    public ClienteTetris(String direccion, JTable scoreTable, String usuario) {
+        this.scoreTable = scoreTable;
         this.usuario = usuario;
 
         try{
@@ -36,7 +40,7 @@ public class ClienteTetris {
                         procesarMensaje(linea);
                     }
                 } catch (Exception e) {
-                    mostrarMensaje("Sin conexion con el servidor");
+                    throw new RuntimeException(e);
                 }
             }).start();
 
@@ -46,21 +50,27 @@ public class ClienteTetris {
     }
 
     private void procesarMensaje(String mensaje) {
-        if (mensaje.startsWith("RANKING")) {
-            recibiendoRanking = true;
-            rankingBuilder.setLength(0); // limpiar buffer
-        } else if (recibiendoRanking) {
+        if (mensaje.startsWith("Puntajes")) {
+            recibiendoPuntajes = true;
+            puntajesBuilder.setLength(0);
+            puntajes.clear();
+        } else if (recibiendoPuntajes) {
             if (mensaje.trim().isEmpty()) {
-                recibiendoRanking = false;
-                SwingUtilities.invokeLater(() -> scoreText.setText(rankingBuilder.toString()));
+                recibiendoPuntajes = false;
+                SwingUtilities.invokeLater(this::actualizarTabla);
             } else {
-                rankingBuilder.append(mensaje).append("\n");
+                try {
+                    String[] partes = mensaje.split(":");
+                    if (partes.length == 2) {
+                        String user = partes[0].trim();
+                        String score = partes[1].trim();
+                        puntajes.add(new String[]{user, score});
+                        System.out.println("→ Recibido del servidor: " + mensaje);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error al procesar mensaje: " + mensaje);
+                }
             }
-        }
-    }
-    private void mostrarMensaje(String mensaje) {
-        if (scoreText != null) {
-            SwingUtilities.invokeLater(() -> scoreText.append(mensaje + "\n"));
         }
     }
 
@@ -71,4 +81,23 @@ public class ClienteTetris {
     public void notificarFinJuego() {
         salidaDatos.println("Perdió:" + usuario);
     }
+
+    public void enviarMensajeChat(String texto) {
+        salidaDatos.println("CHAT:" + usuario + ":" + texto);
+    }
+
+    private void actualizarTabla() {
+        DefaultTableModel model = new DefaultTableModel(new String[]{"Usuario", "Puntaje"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (String[] fila : puntajes) {
+            model.addRow(fila);
+        }
+
+        scoreTable.setModel(model);
+    }
+
 }

@@ -21,15 +21,15 @@ public class GamePanel extends JPanel {
     private ScoreFile scoreFile;
     private Tetromino tetromino;
     private GameThread gameThread;
-    private JTextArea textScore;
+    private JTable scoreTable;
     private ClienteTetris cliente;
 
-    public GamePanel(ClienteTetris cliente, ScoreFile scoreFile, JTextArea textScore) {
+    public GamePanel(ClienteTetris cliente, ScoreFile scoreFile, JTable scoreTable) {
         red = new Color[Filas][Columnas];
         setFocusable(true);
         this.cliente = cliente;
         this.scoreFile = scoreFile;
-        this.textScore = textScore;
+        this.scoreTable = scoreTable;
         generarNuevoBlock();
 
 
@@ -85,16 +85,14 @@ public class GamePanel extends JPanel {
                     cliente.notificarFinJuego();
                 }
 
-                try { Thread.sleep(1000); } catch (InterruptedException ex) {}
+                try { Thread.sleep(100); } catch (InterruptedException ex) {}
 
-// Obtener la primera línea del ranking (nombre del ganador)
-                String[] lineas = textScore.getText().split("\n");
                 String ganador = "Desconocido";
-
-                for (String linea : lineas) {
-                    if (linea.startsWith("usuario:")) {
-                        ganador = linea.trim();
-                        break;
+                if (scoreTable.getRowCount() > 0) {
+                    Object user = scoreTable.getValueAt(0, 0);
+                    Object score = scoreTable.getValueAt(0, 1);
+                    if (user != null && score != null) {
+                        ganador = "Ganador: " + user.toString();
                     }
                 }
 
@@ -203,11 +201,10 @@ public class GamePanel extends JPanel {
 
                 fila++;
                 scoreFile.setScore(scoreFile.getScore() + 100);
-
-                if(textScore != null){
-                    textScore.setText("usuario: " + scoreFile.getUser() + "                 Score: " + String.valueOf(scoreFile.getScore()));
+                if (cliente != null) {
                     cliente.enviarPuntaje(scoreFile.getScore());
                 }
+
             }
         }
     }
