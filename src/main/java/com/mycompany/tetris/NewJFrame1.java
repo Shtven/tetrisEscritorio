@@ -5,7 +5,7 @@ import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class NewJFrame extends JFrame {
+public class NewJFrame1 extends JFrame {
 
     private ClienteTetris cliente;
     private JPanel panelTetris;
@@ -14,7 +14,7 @@ public class NewJFrame extends JFrame {
     private JTextField mensajeAlChat;
     private JButton enviarAlChat;
 
-    public NewJFrame() {
+    public NewJFrame1() {
         setTitle("Tetris Multijugador");
         setSize(1000, 720);
         setLocationRelativeTo(null);
@@ -44,21 +44,20 @@ public class NewJFrame extends JFrame {
     }
 
     private void initComponents() {
-        // Panel de juego centrado
-        panelTetris = new JPanel(new GridBagLayout()); // Cambio clave para centrar
-        panelTetris.setPreferredSize(new Dimension(300, 600)); // 20 filas × 30 px
+        // Panel de juego
+        panelTetris = new JPanel(new BorderLayout());
+        panelTetris.setPreferredSize(new Dimension(350, 680));
         panelTetris.setBackground(Color.BLACK);
 
-        // Tabla de puntuaciones más pequeña
+        // Tabla de puntuaciones
         scoreTable = new JTable(new DefaultTableModel(new Object[][]{}, new String[]{"Jugador", "Puntaje"}));
         scoreTable.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         scoreTable.setRowHeight(24);
         scoreTable.setEnabled(false);
         JScrollPane scrollScore = new JScrollPane(scoreTable);
         scrollScore.setBorder(BorderFactory.createTitledBorder("Puntajes"));
-        scrollScore.setPreferredSize(new Dimension(280, 150)); // Tamaño reducido
 
-        // Área de chat más grande
+        // Área de chat
         chat = new JTextArea();
         chat.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         chat.setEditable(false);
@@ -68,7 +67,6 @@ public class NewJFrame extends JFrame {
         chat.setBorder(new EmptyBorder(10, 10, 10, 10));
         JScrollPane scrollChat = new JScrollPane(chat);
         scrollChat.setBorder(BorderFactory.createTitledBorder("Chat Global"));
-        scrollChat.setPreferredSize(new Dimension(280, 350)); // Tamaño ampliado
 
         // Input de mensaje y botón
         mensajeAlChat = new JTextField();
@@ -90,7 +88,7 @@ public class NewJFrame extends JFrame {
         // Panel derecho
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout(10, 10));
-        rightPanel.setPreferredSize(new Dimension(300, 690));
+        rightPanel.setPreferredSize(new Dimension(600, 700));
         rightPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         rightPanel.setBackground(new Color(30, 30, 30));
 
@@ -107,7 +105,7 @@ public class NewJFrame extends JFrame {
 
         // Split horizontal
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelTetris, rightPanel);
-        splitPane.setDividerLocation(300);
+        splitPane.setDividerLocation(350);
         splitPane.setResizeWeight(0.3);
         splitPane.setBorder(null);
 
@@ -125,9 +123,9 @@ public class NewJFrame extends JFrame {
     }
 
     private void mostrarPanel(JPanel panel) {
-        panel.setPreferredSize(new Dimension(300, 600)); // Coincide con 20 filas
+        panel.setSize(350, 680);
         panelTetris.removeAll();
-        panelTetris.add(panel, new GridBagConstraints()); // Centramos el panel
+        panelTetris.add(panel, BorderLayout.CENTER);
         panelTetris.revalidate();
         panelTetris.repaint();
     }
